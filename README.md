@@ -2,7 +2,6 @@
 1° passo:
 
 Node.js: Instale a versão mais recente do Node.js
-/br
 SQLite3: Não precisa ser instalado separadamente, já que o SQLite é embutido, mas o módulo para Node.js será instalado via npm.
 
 2° passo:
