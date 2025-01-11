@@ -9,9 +9,9 @@ Instale no VScode o SQLite Viewer
 
 3° passo:
 Já com o projeto baixado, acesse a pasta no VScode e vá em terminal, logo em seguida de os seguintes comandos em sequência:
-mkdir todo-app
-cd todo-app
-npm init -y
+mkdir todo-app,
+cd todo-app,
+npm init -y,
 npm install express sqlite3 body-parser
 
 4°passo:
