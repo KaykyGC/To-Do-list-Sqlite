@@ -2,6 +2,7 @@
 1° passo:
 
 Node.js: Instale a versão mais recente do Node.js
+/br
 SQLite3: Não precisa ser instalado separadamente, já que o SQLite é embutido, mas o módulo para Node.js será instalado via npm.
 
 2° passo:
@@ -16,7 +17,7 @@ npm install express sqlite3 body-parser
 
 4°passo:
 Vamos começar a rodar o Banco de Dados, usando os seguintes comandos:
-node db.js - para criar o banco de dados local
+node db.js - para criar o banco de dados local e
 node app.js - para rodar o projeto
 
 5° passo: 
