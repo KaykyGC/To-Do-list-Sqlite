@@ -1,0 +1,77 @@
+@import url('animate.css');
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+body {
+    font-family: 'Ubuntu Mono', serif;
+    background-color: #C5EDC8;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  button {
+    display: block;
+    margin-top: 10px;
+    height: 40px;
+    background: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  input, select{
+    height: 35px;
+  }
+
+  label{
+    height: 30px;
+    margin: 5px;
+  }
+  button:hover {
+    background: #0056b3;
+  }
+  .task-list {
+    margin-top: 20px;
+  }
+  .task-item {
+    background: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  .task-item button {
+    background: #dc3545;
+    border: none;
+    color: white;
+    cursor: pointer;
+    width: 100px;
+    align-items: flex-start;
+  }
+  .task-item button:hover {
+    background: #c82333;
+  }
+
+  .edit-fields button:hover{
+    background-color: green;
+
+  }
+
+  .edit-fields button{
+    display: flex;
+    background-color: green;
+
+  }

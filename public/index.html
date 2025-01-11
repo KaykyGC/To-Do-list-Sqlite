@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciamento de Tarefas</title>
+  <link rel="stylesheet" href="/estilo.css">
+</head> 
+<body>
+  <h1>Gerenciar Tarefas</h1> 
+  
+  <!-- Formulário para Adicionar Tarefas -->
+  <form id="task-form">
+    <label for="nome">Nome da Tarefa:</label>
+    <input type="text" id="nome" name="nome" required>
+
+    <label for="datac">Data de Criação:</label>
+    <input type="date" id="datac" name="datac" required>
+
+    <label for="prioridade">Prioridade:</label>
+    <select id="prioridade" name="prioridade">
+      <option value="Alta">Alta</option>
+      <option value="Média">Média</option>
+      <option value="Baixa">Baixa</option>
+    </select>
+
+    <button type="submit">Adicionar Tarefa</button>
+  </form>
+
+  <h2>Tarefas:</h2>
+  <div id="task-list"></div>
+
+  <script>
+    const form = document.getElementById('task-form');
+    const taskList = document.getElementById('task-list');
+    let editingTaskId = null;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const nome = document.getElementById('nome').value;
+      const datac = document.getElementById('datac').value;
+      const prioridade = document.getElementById('prioridade').value;
+
+      if (editingTaskId) {
+        // Editando uma tarefa existente
+        const response = await fetch(`/edit-task/${editingTaskId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ nome, datac, prioridade }),
+        });
+
+        if (response.ok) {
+          alert('Tarefa editada com sucesso!');
+        } else {
+          alert('Erro ao editar tarefa.');
+        }
+      } else {
+        // Adicionando uma nova tarefa
+        const response = await fetch('/add-task', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ nome, datac, prioridade }),
+        });
+
+        if (response.ok) {
+          alert('Tarefa adicionada com sucesso!');
+        } else {
+          alert('Erro ao adicionar tarefa.');
+        }
+      }
+
+      form.reset();
+      editingTaskId = null;
+      loadTasks();
+    });
+
+    // Função para carregar todas as tarefas
+    async function loadTasks() {
+      const response = await fetch('/tasks');
+      const tasks = await response.json();
+
+      taskList.innerHTML = '';
+      tasks.forEach(task => {
+        const taskItem = document.createElement('div');
+        taskItem.className = 'task-item';
+        taskItem.innerHTML = `
+          <div class="task-content">
+            <strong id="task-name-${task.id}">${task.nome}</strong> - 
+            <span id="task-date-${task.id}">${task.datac}</span> - 
+            <span id="task-priority-${task.id}">${task.prioridade}</span>
+            <button onclick="editTask(${task.id}, '${task.nome}', '${task.datac}', '${task.prioridade}')">Editar</button>
+            <button onclick="deleteTask(${task.id})">Deletar</button>
+          </div>
+          <div class="edit-fields" id="edit-fields-${task.id}" style="display: none;">
+            <input type="text" id="edit-name-${task.id}" value="${task.nome}" />
+            <input type="date" id="edit-date-${task.id}" value="${task.datac}" />
+            <select id="edit-priority-${task.id}">
+              <option value="Alta" ${task.prioridade === 'Alta' ? 'selected' : ''}>Alta</option>
+              <option value="Média" ${task.prioridade === 'Média' ? 'selected' : ''}>Média</option>
+              <option value="Baixa" ${task.prioridade === 'Baixa' ? 'selected' : ''}>Baixa</option>
+            </select>
+            <button onclick="saveEdit(${task.id})">Salvar</button>
+            <button onclick="cancelEdit(${task.id})">Cancelar</button>
+          </div>
+        `;
+        taskList.appendChild(taskItem);
+      });
+    }
+
+    // Função para editar uma tarefa
+    function editTask(id, nome, datac, prioridade) {
+      document.getElementById(`task-name-${id}`).style.display = 'none';
+      document.getElementById(`task-date-${id}`).style.display = 'none';
+      document.getElementById(`task-priority-${id}`).style.display = 'none';
+      document.getElementById(`edit-fields-${id}`).style.display = 'block';
+
+      editingTaskId = id;
+    }
+
+    // Função para salvar a edição
+    async function saveEdit(id) {
+      const nome = document.getElementById(`edit-name-${id}`).value;
+      const datac = document.getElementById(`edit-date-${id}`).value;
+      const prioridade = document.getElementById(`edit-priority-${id}`).value;
+
+      const response = await fetch(`/edit-task/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nome, datac, prioridade }),
+      });
+
+      if (response.ok) {
+        alert('Tarefa editada com sucesso!');
+        loadTasks();
+      } else {
+        alert('Erro ao editar tarefa.');
+      }
+    }
+
+    // Função para cancelar a edição
+    function cancelEdit(id) {
+      document.getElementById(`task-name-${id}`).style.display = 'inline';
+      document.getElementById(`task-date-${id}`).style.display = 'inline';
+      document.getElementById(`task-priority-${id}`).style.display = 'inline';
+      document.getElementById(`edit-fields-${id}`).style.display = 'none';
+
+      editingTaskId = null;
+    }
+
+    // Função para deletar a tarefa
+    async function deleteTask(id) {
+      const response = await fetch(`/delete-task/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        alert('Tarefa deletada com sucesso!');
+        loadTasks();
+      } else {
+        alert('Erro ao deletar tarefa.');
+      }
+    }
+
+    // Carregar as tarefas ao iniciar
+    loadTasks();
+  </script>
+</body>
+</html>
+
